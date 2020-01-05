@@ -1,34 +1,17 @@
 package main
 
 import (
-	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
-type User struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-var users = []User{
-	User{Id: 1, Name: "gato", Email: "gato@soneca.com", Password: "123"},
-	User{Id: 2, Name: "gato2", Email: "gato2@soneca.com", Password: "123sada"},
-}
-
 func main() {
-	r := mux.NewRouter().StrictSlash(true)
+	router := NewRouter()
 
-	r.HandleFunc("/users", getUsers).Methods("GET")
+	fmt.Print("http://localhost:8080/")
 
-	log.Fatal(http.ListenAndServe(":3000", r))
-}
+	server := http.ListenAndServe(":8080", router)
 
-func getUsers(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(users)
+	log.Fatal(server)
 }
